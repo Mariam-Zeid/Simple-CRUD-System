@@ -15,7 +15,6 @@ const clearFormBtn = document.querySelector("#clearForm");
 // ?====== Table Body ======
 const tableBodyData = document.querySelector("#tableData");
 
-
 // ! ================ Functions ================
 
 // ?====== Display Data ======
@@ -50,5 +49,14 @@ addProductBtn.addEventListener("click", function () {
     productDescription: productDescriptionInput.value,
   };
   productList.push(product);
-  showData()
+  showData();
+});
+
+// ?====== clearing the inputs ======
+clearFormBtn.addEventListener("click", function () {
+  productNameInput.value = "";
+  productPriceInput.value = "";
+  productCategorySelector.value = "Select Category";
+  productSaleCheck.checked = false;
+  productDescriptionInput.value = "";
 });
