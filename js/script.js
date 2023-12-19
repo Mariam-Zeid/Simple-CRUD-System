@@ -7,6 +7,7 @@ const productPriceInput = document.querySelector("#productPrice");
 const productCategorySelector = document.querySelector("#productCategory");
 const productSaleCheck = document.querySelector("#productSale");
 const productDescriptionInput = document.querySelector("#productDescription");
+const searchInput = document.querySelector("#search");
 
 // ?====== buttons ======
 const addProductBtn = document.querySelector("#addProduct");
@@ -59,4 +60,37 @@ clearFormBtn.addEventListener("click", function () {
   productCategorySelector.value = "Select Category";
   productSaleCheck.checked = false;
   productDescriptionInput.value = "";
+});
+
+// ?====== Searching for specific product name or category ======
+searchInput.addEventListener("keyup", function () {
+  // * m3 kol harf hay3ml search wa yzhrle el result fe table
+  // * hashuf el productName be includes el searchValue
+  // * mahma katbt el name lowerCase aw upperCase lazm a7wlo wa a3ml replace
+
+  let serachValue = searchInput.value.toLowerCase();
+  let searchResult = "";
+  for (let i = 0; i < productList.length; i++) {
+    if (
+      productList[i].productName.toLowerCase().includes(serachValue) == true ||
+      productList[i].productCategory.toLowerCase().includes(serachValue) == true
+    ) {
+      searchResult += `<tr>
+            <td>${i}</td>
+            <td>${productList[i].productName
+              .toLowerCase()
+              .replace(
+                serachValue,
+                `<span class='bg-info'>${serachValue}</span>`
+              )}</td>
+            <td>${productList[i].productPrice}</td>
+            <td>${productList[i].productCategory}</td>
+            <td>${productList[i].productIsOnSale}</td>
+            <td>${productList[i].productDescription}</td>
+            <td><button class="btn btn-warning">update</button></td>
+            <td><button class="btn btn-danger">delete</button></td>
+          </tr>`;
+    }
+  }
+  tableBodyData.innerHTML = searchResult;
 });
