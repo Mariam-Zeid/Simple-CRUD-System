@@ -31,7 +31,7 @@ function showData() {
             <td>${productList[i].productIsOnSale}</td>
             <td>${productList[i].productDescription}</td>
             <td><button class="btn btn-warning">update</button></td>
-            <td><button class="btn btn-danger">delete</button></td>
+            <td><button onclick="deleteProduct(${i})" class="btn btn-danger">delete</button></td>
           </tr>`;
   }
   tableBodyData.innerHTML = temp;
@@ -94,3 +94,10 @@ searchInput.addEventListener("keyup", function () {
   }
   tableBodyData.innerHTML = searchResult;
 });
+
+
+// ?====== Remove Product from the table ======
+function deleteProduct(deletedIndex){
+  productList.splice(deletedIndex ,1);
+  showData()
+}
