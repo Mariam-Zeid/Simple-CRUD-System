@@ -1,6 +1,3 @@
-// ! main CRUD variable
-let productList = [];
-
 // ?====== Inputs ======
 const productNameInput = document.querySelector("#productName");
 const productPriceInput = document.querySelector("#productPrice");
@@ -15,6 +12,13 @@ const clearFormBtn = document.querySelector("#clearForm");
 
 // ?====== Table Body ======
 const tableBodyData = document.querySelector("#tableData");
+
+// ! main CRUD variable (lw el array sh fady rag3le el values ely gwah wa ezherha)
+let productList = [];
+if (localStorage.getItem("productList") != null) {
+  productList = JSON.parse(localStorage.getItem("productList"));
+  showData();
+}
 
 // ! ================ Functions ================
 
@@ -51,6 +55,8 @@ addProductBtn.addEventListener("click", function () {
   };
   productList.push(product);
   showData();
+
+  localStorage.setItem("productList", JSON.stringify(productList));
 });
 
 // ?====== clearing the inputs ======
@@ -95,9 +101,10 @@ searchInput.addEventListener("keyup", function () {
   tableBodyData.innerHTML = searchResult;
 });
 
-
 // ?====== Remove Product from the table ======
-function deleteProduct(deletedIndex){
-  productList.splice(deletedIndex ,1);
-  showData()
+function deleteProduct(deletedIndex) {
+  productList.splice(deletedIndex, 1);
+  showData();
+
+  localStorage.setItem("productList", JSON.stringify(productList));
 }
