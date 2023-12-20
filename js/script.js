@@ -17,6 +17,10 @@ const tableBodyData = document.querySelector("#tableData");
 // ?====== Other Variables ======
 let currentIndex = -1;
 
+// ?====== Validation Variables ======
+let productNameValidation; // initial value
+let productPriceValidation; // initial value
+
 // ! main CRUD variable (lw el array sh fady rag3le el values ely gwah wa ezherha)
 let productList = [];
 if (localStorage.getItem("productList") != null) {
@@ -25,6 +29,48 @@ if (localStorage.getItem("productList") != null) {
 }
 
 // ! ================ Functions ================
+
+//***************************************************/
+// ? main function (VALIDATION)
+//***************************************************/
+
+function validate(regex, inputElement) {
+  const isValid = regex.test(inputElement.value);
+  if (isValid) {
+    inputElement.classList.add("is-valid");
+    inputElement.classList.remove("is-invalid");
+  } else {
+    inputElement.classList.remove("is-valid");
+    inputElement.classList.add("is-invalid");
+  }
+  return isValid;
+}
+
+// ? Checking the validation of the product name
+productNameInput.addEventListener("change", function () {
+  /*
+   * * [A-Z] => Lazm awel harf ykon Capitial
+   * * [a-z]+ => aktr zai mana 3aiza bs horof bas
+   * * [0-9]? => optional
+   */
+  const regexName = /^[A-Z][a-z]+[0-9]?$/;
+  // const isValid = validate(regexName, productNameInput);
+  // console.log(isValid);
+  productNameValidation = validate(regexName, productNameInput);
+});
+
+// ? Checking the validation of the product price
+productPriceInput.addEventListener("change", function () {
+  /*
+   * * [A-Z] => Lazm awel harf ykon Capitial
+   * * [a-z]+ => aktr zai mana 3aiza bs horof bas
+   * * [0-9]? => optional
+   */
+  const regexPrice = /^[1-9][0-9]{1,5}$/;
+  // const isValid = validate(regexPrice, productPriceInput);
+  // console.log(isValid);
+  productPriceValidation = validate(regexPrice, productPriceInput);
+});
 
 // ?====== Display Data ======
 function showData() {
@@ -47,20 +93,24 @@ function showData() {
 
 // ?====== Add Product to the table ======
 addProductBtn.addEventListener("click", function () {
-  // * kol mara h3ml add hazawed object gded ala el productList
-  product = {
-    productName: productNameInput.value,
-    // Number() 3shan ay haga btrg3 mn el HTML btkon String
-    productPrice: Number(productPriceInput.value),
-    productCategory: productCategorySelector.value,
-    // Boolean Value
-    productIsOnSale: productSaleCheck.checked,
-    productDescription: productDescriptionInput.value,
-  };
-  productList.push(product);
-  showData();
+  if (productNameValidation && productPriceValidation) {
+    // * kol mara h3ml add hazawed object gded ala el productList
+    product = {
+      productName: productNameInput.value,
+      // Number() 3shan ay haga btrg3 mn el HTML btkon String
+      productPrice: Number(productPriceInput.value),
+      productCategory: productCategorySelector.value,
+      // Boolean Value
+      productIsOnSale: productSaleCheck.checked,
+      productDescription: productDescriptionInput.value,
+    };
+    productList.push(product);
+    showData();
 
-  localStorage.setItem("productList", JSON.stringify(productList));
+    localStorage.setItem("productList", JSON.stringify(productList));
+  } else {
+    alert("Enter valid values");
+  }
 });
 
 // ?====== clearing the inputs ======
@@ -130,23 +180,27 @@ function editProduct(editedProduct) {
 }
 
 editProductBtn.addEventListener("click", function () {
-  // * bakhud el product values mn el inputs wa arg3ha taht tany
-  let updatedProduct = {
-    productName: productNameInput.value,
-    productPrice: productPriceInput.value,
-    productCategory: productCategorySelector.value,
-    productIsOnSale: productSaleCheck.checked,
-    productDescription: productDescriptionInput.value,
-  };
-  productList[currentIndex] = updatedProduct;
+  if (productNameValidation && productPriceValidation) {
+    // * bakhud el product values mn el inputs wa arg3ha taht tany
+    let updatedProduct = {
+      productName: productNameInput.value,
+      productPrice: productPriceInput.value,
+      productCategory: productCategorySelector.value,
+      productIsOnSale: productSaleCheck.checked,
+      productDescription: productDescriptionInput.value,
+    };
+    productList[currentIndex] = updatedProduct;
 
-  // ? Display the remaining Objects Properties in the table
-  showData();
+    // ? Display the remaining Objects Properties in the table
+    showData();
 
-  // ? Storing all the new information in the local storage. (kol mara hams7 object ha set mn gded)
-  localStorage.setItem("productList", JSON.stringify(productList));
+    // ? Storing all the new information in the local storage. (kol mara hams7 object ha set mn gded)
+    localStorage.setItem("productList", JSON.stringify(productList));
 
-  // ? Adding and Removing classes from HTML Document
-  addProductBtn.classList.remove("d-none");
-  editProductBtn.classList.add("d-none");
+    // ? Adding and Removing classes from HTML Document
+    addProductBtn.classList.remove("d-none");
+    editProductBtn.classList.add("d-none");
+  } else {
+    alert("Enter valid values");
+  }
 });
